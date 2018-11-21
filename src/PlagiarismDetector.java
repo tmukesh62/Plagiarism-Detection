@@ -3,19 +3,19 @@ import javax.annotation.*;
 
 
 abstract class PlagiarismDetector {
-	private List<String> synonyms;
-	private List<String> baseTextLines;
-	private List<String> comparisonTextLines;
-	private int tupleSize;
+  private List<String> synonyms;
+  private List<String> baseTextLines;
+  private List<String> comparisonTextLines;
+  private int tupleSize;
 
-	private final PlagiarismDetectionService plagiarismDetectionService;
+  private final PlagiarismDetectionService plagiarismDetectionService;
 
   PlagiarismDetector(@Nonnull final PlagiarismDetectionService plagiarismDetectionService) {
-	  this.plagiarismDetectionService = plagiarismDetectionService;
+    this.plagiarismDetectionService = plagiarismDetectionService;
   }
 
   PlagiarismDetector() {
-	  this(new PlagiarismDetectionService());
+    this(new PlagiarismDetectionService());
   }
 
   /**
@@ -24,28 +24,28 @@ abstract class PlagiarismDetector {
    * @return the plagiarism ratio
    */
   double execute() throws Exception {
-		final Map<String, Set<String>> wordToSynonyms = plagiarismDetectionService.constructWordToSynonymsMap(synonyms);
-		final List<NTuple> comparisonNTuples = plagiarismDetectionService.constructNTuples(comparisonTextLines, tupleSize);
-		final List<NTuple> baseNTuples = plagiarismDetectionService.constructNTuples(baseTextLines, tupleSize);
+    final Map<String, Set<String>> wordToSynonyms = plagiarismDetectionService.constructWordToSynonymsMap(synonyms);
+    final List<NTuple> comparisonNTuples = plagiarismDetectionService.constructNTuples(comparisonTextLines, tupleSize);
+    final List<NTuple> baseNTuples = plagiarismDetectionService.constructNTuples(baseTextLines, tupleSize);
 
-		final double plagiarismRatio =
+    final double plagiarismRatio =
         plagiarismDetectionService.calculatePlagiarismRatio(comparisonNTuples, baseNTuples, wordToSynonyms);
 
-		return plagiarismRatio;
-	}
+    return plagiarismRatio;
+  }
 
   /**
    * Get all the inputs needed for the calculation.
    */
   public void getInput() throws Exception {
-		synonyms = readSynonyms();
+    synonyms = readSynonyms();
 
-		baseTextLines = readBaseText();
+    baseTextLines = readBaseText();
 
-		comparisonTextLines = readComparisonText();
+    comparisonTextLines = readComparisonText();
 
-		tupleSize = readTupleSize();
-	}
+    tupleSize = readTupleSize();
+  }
 
   /**
    * Read synonyms list.

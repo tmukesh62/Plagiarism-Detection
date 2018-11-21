@@ -5,7 +5,8 @@ import javax.annotation.*;
 
 class PlagiarismDetectionService {
 
-  PlagiarismDetectionService() {}
+  PlagiarismDetectionService() {
+  }
 
   /**
    * Construct word to synonyms map given the list of synonym texts.
@@ -19,14 +20,14 @@ class PlagiarismDetectionService {
    * @return the word to synonyms map
    */
   @Nonnull
-  Map<String, Set<String>> constructWordToSynonymsMap(@Nonnull final  List<String> synonyms) {
+  Map<String, Set<String>> constructWordToSynonymsMap(@Nonnull final List<String> synonyms) {
     final Map<String, Set<String>> wordToSynonyms = new HashMap<>();
 
     synonyms.stream().forEach(synonym -> {
       // assuming the words are separated by only one space
       final String[] words = synonym.split(" ");
       final Set<String> wordsInSet = new HashSet<>(Arrays.asList(words));
-      for(final String word: words) {
+      for (final String word : words) {
         if (!wordToSynonyms.containsKey(word)) {
           wordToSynonyms.put(word, wordsInSet);
         }
@@ -51,7 +52,7 @@ class PlagiarismDetectionService {
   List<NTuple> constructNTuples(@Nonnull final List<String> lines, final int tupleSize) throws Exception {
     final List<NTuple> nTuples = new ArrayList<>();
 
-    for (final String line: lines) {
+    for (final String line : lines) {
       final List<String> words = getWordsFromLine(line);
 
       if (words.size() < tupleSize) {
@@ -62,12 +63,11 @@ class PlagiarismDetectionService {
 
         final NTuple nTuple = new NTuple(tupleSize);
 
-        for (int j = i ; j < i + tupleSize; j++) {
+        for (int j = i; j < i + tupleSize; j++) {
           nTuple.addWord(words.get(j));
         }
 
         nTuples.add(nTuple);
-
       }
     }
 
@@ -86,15 +86,14 @@ class PlagiarismDetectionService {
       @Nonnull final List<NTuple> baseNTuples, @Nonnull final Map<String, Set<String>> wordToSynonyms) {
     int matchingTuples = 0;
 
-    for (final NTuple comparison: comparisonNTuples) {
-      for (final NTuple base: baseNTuples) {
+    for (final NTuple comparison : comparisonNTuples) {
+      for (final NTuple base : baseNTuples) {
         if (base.areEqual(comparison, wordToSynonyms)) {
           matchingTuples++;
           break;
         }
       }
     }
-
 
     return matchingTuples * 1.0 / baseNTuples.size();
   }
